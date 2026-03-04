@@ -14,9 +14,8 @@ public class AddressBookMain {
             System.out.println("\n===== Address Book System =====");
             System.out.println("1. Create AddressBook");
             System.out.println("2. Add Contact");
-            System.out.println("3. Count Persons by City");
-            System.out.println("4. Count Persons by State");
-            System.out.println("5. Exit");
+            System.out.println("3. Sort Contacts Alphabetically");
+            System.out.println("4. Exit");
 
             System.out.print("Enter choice: ");
             int choice = Integer.parseInt(scanner.nextLine());
@@ -52,14 +51,10 @@ public class AddressBookMain {
                     break;
 
                 case 3:
-                    system.countByCity();
+                    system.sortByName();
                     break;
 
                 case 4:
-                    system.countByState();
-                    break;
-
-                case 5:
                     System.out.println("Exiting...");
                     scanner.close();
                     return;

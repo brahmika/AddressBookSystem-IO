@@ -34,47 +34,24 @@ public class AddressBookSystem {
         book.addContact(contact);
     }
 
-    // Count By City
-    public void countByCity() {
+    // 🔥 UC11 – Sort By Name
+    public void sortByName() {
 
-        Map<String, Long> cityCount =
+        List<Contact> sortedContacts =
                 addressBooks.values()
                         .stream()
                         .flatMap(book -> book.getContacts().stream())
-                        .collect(Collectors.groupingBy(
-                                Contact::getCity,
-                                Collectors.counting()
-                        ));
+                        .sorted(
+                                Comparator.comparing(Contact::getFirstName, String.CASE_INSENSITIVE_ORDER)
+                                        .thenComparing(Contact::getLastName, String.CASE_INSENSITIVE_ORDER)
+                        )
+                        .collect(Collectors.toList());
 
-        if (cityCount.isEmpty()) {
+        if (sortedContacts.isEmpty()) {
             System.out.println("No contacts available.");
             return;
         }
 
-        cityCount.forEach((city, count) ->
-                System.out.println("City: " + city + " | Count: " + count)
-        );
-    }
-
-    // Count By State
-    public void countByState() {
-
-        Map<String, Long> stateCount =
-                addressBooks.values()
-                        .stream()
-                        .flatMap(book -> book.getContacts().stream())
-                        .collect(Collectors.groupingBy(
-                                Contact::getState,
-                                Collectors.counting()
-                        ));
-
-        if (stateCount.isEmpty()) {
-            System.out.println("No contacts available.");
-            return;
-        }
-
-        stateCount.forEach((state, count) ->
-                System.out.println("State: " + state + " | Count: " + count)
-        );
+        sortedContacts.forEach(System.out::println);
     }
 }
