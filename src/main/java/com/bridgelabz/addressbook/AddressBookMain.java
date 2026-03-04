@@ -1,124 +1,113 @@
 package com.bridgelabz.addressbook;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AddressBookMain {
 
     public static void main(String[] args) {
 
-        System.out.println("Welcome to Address Book System");
-
         Scanner scanner = new Scanner(System.in);
         AddressBookSystem system = new AddressBookSystem();
 
-        boolean running = true;
+        while (true) {
 
-        while (running) {
+            System.out.println("\n===== Address Book System =====");
+            System.out.println("1. Create AddressBook");
+            System.out.println("2. Add Contact");
+            System.out.println("3. Delete Contact");
+            System.out.println("4. Search by City");
+            System.out.println("5. Search by State");
+            System.out.println("6. Exit");
 
-            System.out.println("\nMain Menu:");
-            System.out.println("1. Create Address Book");
-            System.out.println("2. Select Address Book");
-            System.out.println("3. Display All Address Books");
-            System.out.println("4. Exit");
-
+            System.out.print("Enter choice: ");
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
 
                 case 1:
-                    System.out.println("Enter Address Book Name:");
-                    system.createAddressBook(scanner.nextLine());
+                    System.out.print("Enter AddressBook name: ");
+                    String bookName = scanner.nextLine();
+                    system.addAddressBook(bookName);
                     break;
 
                 case 2:
-                    System.out.println("Enter Address Book Name:");
-                    AddressBook book = system.getAddressBook(scanner.nextLine());
-                    if (book != null) manageAddressBook(book, scanner);
-                    break;
+                    System.out.print("Enter AddressBook name: ");
+                    String addBook = scanner.nextLine();
+                    AddressBook addressBook = system.getAddressBook(addBook);
 
-                case 3:
-                    system.displayAllAddressBooks();
-                    break;
+                    if (addressBook == null) {
+                        System.out.println("AddressBook not found!");
+                        break;
+                    }
 
-                case 4:
-                    running = false;
-                    break;
-
-                default:
-                    System.out.println("Invalid choice.");
-            }
-        }
-
-        scanner.close();
-    }
-
-    private static void manageAddressBook(AddressBook book, Scanner scanner) {
-
-        boolean managing = true;
-
-        while (managing) {
-
-            System.out.println("\nAddress Book Menu:");
-            System.out.println("1. Add Contact");
-            System.out.println("2. Edit Contact");
-            System.out.println("3. Delete Contact");
-            System.out.println("4. Display Contacts");
-            System.out.println("5. Back");
-
-            int choice = Integer.parseInt(scanner.nextLine());
-
-            switch (choice) {
-
-                case 1:
-                    System.out.println("Enter First Name:");
+                    System.out.print("First Name: ");
                     String firstName = scanner.nextLine();
 
-                    System.out.println("Enter Last Name:");
+                    System.out.print("Last Name: ");
                     String lastName = scanner.nextLine();
 
-                    System.out.println("Enter Address:");
-                    String address = scanner.nextLine();
-
-                    System.out.println("Enter City:");
+                    System.out.print("City: ");
                     String city = scanner.nextLine();
 
-                    System.out.println("Enter State:");
+                    System.out.print("State: ");
                     String state = scanner.nextLine();
 
-                    System.out.println("Enter Zip:");
-                    String zip = scanner.nextLine();
-
-                    System.out.println("Enter Phone Number:");
-                    String phone = scanner.nextLine();
-
-                    System.out.println("Enter Email:");
-                    String email = scanner.nextLine();
-
-                    Contact contact = new Contact(
-                            firstName, lastName, address,
-                            city, state, zip, phone, email
-                    );
-
-                    book.addContact(contact);
-                    break;
-
-                case 2:
-                    System.out.println("Enter First Name to Edit:");
-                    book.editContact(scanner.nextLine(), scanner);
+                    Contact contact = new Contact(firstName, lastName, city, state);
+                    addressBook.addContact(contact);
                     break;
 
                 case 3:
-                    System.out.println("Enter First Name to Delete:");
-                    book.deleteContact(scanner.nextLine());
+                    System.out.print("Enter AddressBook name: ");
+                    String deleteBook = scanner.nextLine();
+                    AddressBook book = system.getAddressBook(deleteBook);
+
+                    if (book == null) {
+                        System.out.println("AddressBook not found!");
+                        break;
+                    }
+
+                    System.out.print("First Name: ");
+                    String delFirst = scanner.nextLine();
+
+                    System.out.print("Last Name: ");
+                    String delLast = scanner.nextLine();
+
+                    book.deleteContact(delFirst, delLast);
                     break;
 
                 case 4:
-                    book.displayContacts();
+                    System.out.print("Enter City: ");
+                    String searchCity = scanner.nextLine();
+
+                    List<Contact> cityResults =
+                            system.searchByCityOrState(searchCity, true);
+
+                    if (cityResults.isEmpty()) {
+                        System.out.println("No persons found in city: " + searchCity);
+                    } else {
+                        cityResults.forEach(System.out::println);
+                    }
                     break;
 
                 case 5:
-                    managing = false;
+                    System.out.print("Enter State: ");
+                    String searchState = scanner.nextLine();
+
+                    List<Contact> stateResults =
+                            system.searchByCityOrState(searchState, false);
+
+                    if (stateResults.isEmpty()) {
+                        System.out.println("No persons found in state: " + searchState);
+                    } else {
+                        stateResults.forEach(System.out::println);
+                    }
                     break;
+
+                case 6:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
 
                 default:
                     System.out.println("Invalid choice.");

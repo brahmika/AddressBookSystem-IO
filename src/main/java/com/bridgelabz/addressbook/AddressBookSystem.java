@@ -1,40 +1,39 @@
 package com.bridgelabz.addressbook;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddressBookSystem {
 
     private Map<String, AddressBook> addressBooks = new HashMap<>();
 
-    public void createAddressBook(String name) {
+    public void addAddressBook(String name) {
 
         if (addressBooks.containsKey(name)) {
-            System.out.println("Address Book already exists.");
+            System.out.println("AddressBook already exists!");
             return;
         }
 
-        addressBooks.put(name, new AddressBook());
-        System.out.println("Address Book '" + name + "' created successfully.");
+        addressBooks.put(name, new AddressBook(name));
+        System.out.println("AddressBook created successfully!");
     }
 
     public AddressBook getAddressBook(String name) {
-
-        if (!addressBooks.containsKey(name)) {
-            System.out.println("Address Book not found.");
-            return null;
-        }
-
         return addressBooks.get(name);
     }
 
-    public void displayAllAddressBooks() {
+    public List<Contact> searchByCityOrState(String keyword, boolean searchByCity) {
 
-        if (addressBooks.isEmpty()) {
-            System.out.println("No Address Books available.");
-            return;
-        }
-
-        addressBooks.keySet().forEach(System.out::println);
+        return addressBooks.values()
+                .stream()
+                .flatMap(book -> book.getContacts().stream())
+                .filter(contact -> {
+                    if (searchByCity) {
+                        return contact.getCity().equalsIgnoreCase(keyword);
+                    } else {
+                        return contact.getState().equalsIgnoreCase(keyword);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 }
