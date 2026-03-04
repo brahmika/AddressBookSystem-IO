@@ -1,13 +1,11 @@
 package com.bridgelabz.addressbook;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddressBookSystem {
 
     private Map<String, AddressBook> addressBooks = new HashMap<>();
-
-    private Map<String, List<Contact>> cityDictionary = new HashMap<>();
-    private Map<String, List<Contact>> stateDictionary = new HashMap<>();
 
     public void addAddressBook(String name) {
 
@@ -24,7 +22,6 @@ public class AddressBookSystem {
         return addressBooks.get(name);
     }
 
-    // Centralized Add (Important)
     public void addContactToBook(String bookName, Contact contact) {
 
         AddressBook book = addressBooks.get(bookName);
@@ -34,41 +31,50 @@ public class AddressBookSystem {
             return;
         }
 
-        // Add to AddressBook
         book.addContact(contact);
-
-        // Update City Dictionary
-        cityDictionary
-                .computeIfAbsent(contact.getCity(), k -> new ArrayList<>())
-                .add(contact);
-
-        // Update State Dictionary
-        stateDictionary
-                .computeIfAbsent(contact.getState(), k -> new ArrayList<>())
-                .add(contact);
     }
 
-    public void viewByCity(String city) {
+    // Count By City
+    public void countByCity() {
 
-        List<Contact> contacts = cityDictionary.get(city);
+        Map<String, Long> cityCount =
+                addressBooks.values()
+                        .stream()
+                        .flatMap(book -> book.getContacts().stream())
+                        .collect(Collectors.groupingBy(
+                                Contact::getCity,
+                                Collectors.counting()
+                        ));
 
-        if (contacts == null || contacts.isEmpty()) {
-            System.out.println("No persons found in city: " + city);
+        if (cityCount.isEmpty()) {
+            System.out.println("No contacts available.");
             return;
         }
 
-        contacts.forEach(System.out::println);
+        cityCount.forEach((city, count) ->
+                System.out.println("City: " + city + " | Count: " + count)
+        );
     }
 
-    public void viewByState(String state) {
+    // Count By State
+    public void countByState() {
 
-        List<Contact> contacts = stateDictionary.get(state);
+        Map<String, Long> stateCount =
+                addressBooks.values()
+                        .stream()
+                        .flatMap(book -> book.getContacts().stream())
+                        .collect(Collectors.groupingBy(
+                                Contact::getState,
+                                Collectors.counting()
+                        ));
 
-        if (contacts == null || contacts.isEmpty()) {
-            System.out.println("No persons found in state: " + state);
+        if (stateCount.isEmpty()) {
+            System.out.println("No contacts available.");
             return;
         }
 
-        contacts.forEach(System.out::println);
+        stateCount.forEach((state, count) ->
+                System.out.println("State: " + state + " | Count: " + count)
+        );
     }
 }
