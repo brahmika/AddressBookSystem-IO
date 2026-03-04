@@ -6,21 +6,69 @@ public class AddressBookMain {
 
     public static void main(String[] args) {
 
-        System.out.println("Welcome to Address Book Program");
+        System.out.println("Welcome to Address Book System");
 
         Scanner scanner = new Scanner(System.in);
-        AddressBook addressBook = new AddressBook();
+        AddressBookSystem system = new AddressBookSystem();
 
         boolean running = true;
 
         while (running) {
 
-            System.out.println("\nSelect an Option:");
+            System.out.println("\nMain Menu:");
+            System.out.println("1. Create Address Book");
+            System.out.println("2. Select Address Book");
+            System.out.println("3. Display All Address Books");
+            System.out.println("4. Exit");
+
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("Enter Address Book Name:");
+                    system.createAddressBook(scanner.nextLine());
+                    break;
+
+                case 2:
+                    System.out.println("Enter Address Book Name:");
+                    String name = scanner.nextLine();
+                    AddressBook book = system.getAddressBook(name);
+
+                    if (book != null) {
+                        manageAddressBook(book, scanner);
+                    }
+                    break;
+
+                case 3:
+                    system.displayAllAddressBooks();
+                    break;
+
+                case 4:
+                    running = false;
+                    System.out.println("Exiting System...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void manageAddressBook(AddressBook book, Scanner scanner) {
+
+        boolean managing = true;
+
+        while (managing) {
+
+            System.out.println("\nAddress Book Menu:");
             System.out.println("1. Add Contact");
             System.out.println("2. Edit Contact");
             System.out.println("3. Delete Contact");
             System.out.println("4. Display Contacts");
-            System.out.println("5. Exit");
+            System.out.println("5. Back");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
@@ -56,33 +104,30 @@ public class AddressBookMain {
                             city, state, zip, phone, email
                     );
 
-                    addressBook.addContact(contact);
+                    book.addContact(contact);
                     break;
 
                 case 2:
                     System.out.println("Enter First Name to Edit:");
-                    addressBook.editContact(scanner.nextLine(), scanner);
+                    book.editContact(scanner.nextLine(), scanner);
                     break;
 
                 case 3:
                     System.out.println("Enter First Name to Delete:");
-                    addressBook.deleteContact(scanner.nextLine());
+                    book.deleteContact(scanner.nextLine());
                     break;
 
                 case 4:
-                    addressBook.displayContacts();
+                    book.displayContacts();
                     break;
 
                 case 5:
-                    running = false;
-                    System.out.println("Exiting Address Book...");
+                    managing = false;
                     break;
 
                 default:
                     System.out.println("Invalid choice.");
             }
         }
-
-        scanner.close();
     }
 }
