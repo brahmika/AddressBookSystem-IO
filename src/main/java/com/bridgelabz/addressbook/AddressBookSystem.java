@@ -2,7 +2,6 @@ package com.bridgelabz.addressbook;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class AddressBookSystem {
 
@@ -11,7 +10,7 @@ public class AddressBookSystem {
     public void createAddressBook(String name) {
 
         if (addressBooks.containsKey(name)) {
-            System.out.println("Address Book with this name already exists.");
+            System.out.println("Address Book already exists.");
             return;
         }
 
@@ -36,9 +35,6 @@ public class AddressBookSystem {
             return;
         }
 
-        System.out.println("Available Address Books:");
-        for (String name : addressBooks.keySet()) {
-            System.out.println("- " + name);
-        }
+        addressBooks.keySet().forEach(System.out::println);
     }
 }

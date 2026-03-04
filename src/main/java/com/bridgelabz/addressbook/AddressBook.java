@@ -3,7 +3,6 @@ package com.bridgelabz.addressbook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class AddressBook {
 
@@ -14,15 +13,23 @@ public class AddressBook {
         loadFromFile();
     }
 
+    // UC7 – Duplicate check using Streams
     public void addContact(Contact contact) {
+
+        boolean exists = contacts.stream()
+                .anyMatch(existing -> existing.equals(contact));
+
+        if (exists) {
+            System.out.println("Duplicate contact found. Entry not added.");
+            return;
+        }
+
         contacts.add(contact);
         saveToFile();
         System.out.println("Contact added successfully!");
     }
 
-    public void editContact(String firstName, Scanner scanner) {
-
-        boolean found = false;
+    public void editContact(String firstName, java.util.Scanner scanner) {
 
         for (Contact contact : contacts) {
 
@@ -46,14 +53,23 @@ public class AddressBook {
                 System.out.println("Enter New Email:");
                 contact.setEmail(scanner.nextLine());
 
-                found = true;
-                break;
+                saveToFile();
+                System.out.println("Contact updated successfully!");
+                return;
             }
         }
 
-        if (found) {
+        System.out.println("Contact not found.");
+    }
+
+    public void deleteContact(String firstName) {
+
+        boolean removed = contacts.removeIf(contact ->
+                contact.getFirstName().equalsIgnoreCase(firstName));
+
+        if (removed) {
             saveToFile();
-            System.out.println("Contact updated successfully!");
+            System.out.println("Contact deleted successfully!");
         } else {
             System.out.println("Contact not found.");
         }
@@ -108,21 +124,6 @@ public class AddressBook {
             return;
         }
 
-        for (Contact contact : contacts) {
-            System.out.println(contact);
-        }
+        contacts.forEach(System.out::println);
     }
-    public void deleteContact(String firstName) {
-
-        boolean removed = contacts.removeIf(contact ->
-                contact.getFirstName().equalsIgnoreCase(firstName));
-
-        if (removed) {
-            saveToFile();
-            System.out.println("Contact deleted successfully!");
-        } else {
-            System.out.println("Contact not found.");
-        }
-    }
-
 }

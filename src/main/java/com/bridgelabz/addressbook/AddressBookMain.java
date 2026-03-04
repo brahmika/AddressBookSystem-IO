@@ -32,12 +32,8 @@ public class AddressBookMain {
 
                 case 2:
                     System.out.println("Enter Address Book Name:");
-                    String name = scanner.nextLine();
-                    AddressBook book = system.getAddressBook(name);
-
-                    if (book != null) {
-                        manageAddressBook(book, scanner);
-                    }
+                    AddressBook book = system.getAddressBook(scanner.nextLine());
+                    if (book != null) manageAddressBook(book, scanner);
                     break;
 
                 case 3:
@@ -46,7 +42,6 @@ public class AddressBookMain {
 
                 case 4:
                     running = false;
-                    System.out.println("Exiting System...");
                     break;
 
                 default:
