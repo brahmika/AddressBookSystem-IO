@@ -1,11 +1,13 @@
 package com.bridgelabz.addressbook;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AddressBookSystem {
 
     private Map<String, AddressBook> addressBooks = new HashMap<>();
+
+    private Map<String, List<Contact>> cityDictionary = new HashMap<>();
+    private Map<String, List<Contact>> stateDictionary = new HashMap<>();
 
     public void addAddressBook(String name) {
 
@@ -22,18 +24,51 @@ public class AddressBookSystem {
         return addressBooks.get(name);
     }
 
-    public List<Contact> searchByCityOrState(String keyword, boolean searchByCity) {
+    // Centralized Add (Important)
+    public void addContactToBook(String bookName, Contact contact) {
 
-        return addressBooks.values()
-                .stream()
-                .flatMap(book -> book.getContacts().stream())
-                .filter(contact -> {
-                    if (searchByCity) {
-                        return contact.getCity().equalsIgnoreCase(keyword);
-                    } else {
-                        return contact.getState().equalsIgnoreCase(keyword);
-                    }
-                })
-                .collect(Collectors.toList());
+        AddressBook book = addressBooks.get(bookName);
+
+        if (book == null) {
+            System.out.println("AddressBook not found!");
+            return;
+        }
+
+        // Add to AddressBook
+        book.addContact(contact);
+
+        // Update City Dictionary
+        cityDictionary
+                .computeIfAbsent(contact.getCity(), k -> new ArrayList<>())
+                .add(contact);
+
+        // Update State Dictionary
+        stateDictionary
+                .computeIfAbsent(contact.getState(), k -> new ArrayList<>())
+                .add(contact);
+    }
+
+    public void viewByCity(String city) {
+
+        List<Contact> contacts = cityDictionary.get(city);
+
+        if (contacts == null || contacts.isEmpty()) {
+            System.out.println("No persons found in city: " + city);
+            return;
+        }
+
+        contacts.forEach(System.out::println);
+    }
+
+    public void viewByState(String state) {
+
+        List<Contact> contacts = stateDictionary.get(state);
+
+        if (contacts == null || contacts.isEmpty()) {
+            System.out.println("No persons found in state: " + state);
+            return;
+        }
+
+        contacts.forEach(System.out::println);
     }
 }

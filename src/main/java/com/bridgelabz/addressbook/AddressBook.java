@@ -12,10 +12,6 @@ public class AddressBook {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public List<Contact> getContacts() {
         return contacts;
     }
@@ -32,19 +28,5 @@ public class AddressBook {
 
         contacts.add(contact);
         System.out.println("Contact added successfully!");
-    }
-
-    public void deleteContact(String firstName, String lastName) {
-
-        boolean removed = contacts.removeIf(contact ->
-                contact.getFirstName().equalsIgnoreCase(firstName) &&
-                        contact.getLastName().equalsIgnoreCase(lastName)
-        );
-
-        if (removed) {
-            System.out.println("Contact deleted successfully.");
-        } else {
-            System.out.println("Contact not found.");
-        }
     }
 }
