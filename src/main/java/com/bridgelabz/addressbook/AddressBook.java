@@ -112,4 +112,17 @@ public class AddressBook {
             System.out.println(contact);
         }
     }
+    public void deleteContact(String firstName) {
+
+        boolean removed = contacts.removeIf(contact ->
+                contact.getFirstName().equalsIgnoreCase(firstName));
+
+        if (removed) {
+            saveToFile();
+            System.out.println("Contact deleted successfully!");
+        } else {
+            System.out.println("Contact not found.");
+        }
+    }
+
 }

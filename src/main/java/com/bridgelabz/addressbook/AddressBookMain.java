@@ -56,7 +56,15 @@ public class AddressBookMain {
             String name = scanner.nextLine();
             addressBook.editContact(name, scanner);
         }
+        else if (choice == 3) {
 
+            System.out.println("Enter First Name to Delete:");
+            String name = scanner.nextLine();
+            addressBook.deleteContact(name);
+        }
+        System.out.println("\n1. Add Contact");
+        System.out.println("2. Edit Contact");
+        System.out.println("3. Delete Contact");
         addressBook.displayContacts();
         scanner.close();
     }
