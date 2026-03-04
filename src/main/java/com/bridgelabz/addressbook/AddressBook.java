@@ -3,6 +3,7 @@ package com.bridgelabz.addressbook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AddressBook {
 
@@ -10,35 +11,73 @@ public class AddressBook {
     private static final String FILE_NAME = "contacts.txt";
 
     public AddressBook() {
-        loadFromFile(); // Load contacts automatically on startup
+        loadFromFile();
     }
 
     public void addContact(Contact contact) {
         contacts.add(contact);
-        saveToFile(contact);
+        saveToFile();
         System.out.println("Contact added successfully!");
     }
 
-    private void saveToFile(Contact contact) {
+    public void editContact(String firstName, Scanner scanner) {
+
+        boolean found = false;
+
+        for (Contact contact : contacts) {
+
+            if (contact.getFirstName().equalsIgnoreCase(firstName)) {
+
+                System.out.println("Enter New Address:");
+                contact.setAddress(scanner.nextLine());
+
+                System.out.println("Enter New City:");
+                contact.setCity(scanner.nextLine());
+
+                System.out.println("Enter New State:");
+                contact.setState(scanner.nextLine());
+
+                System.out.println("Enter New Zip:");
+                contact.setZip(scanner.nextLine());
+
+                System.out.println("Enter New Phone Number:");
+                contact.setPhoneNumber(scanner.nextLine());
+
+                System.out.println("Enter New Email:");
+                contact.setEmail(scanner.nextLine());
+
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            saveToFile();
+            System.out.println("Contact updated successfully!");
+        } else {
+            System.out.println("Contact not found.");
+        }
+    }
+
+    private void saveToFile() {
 
         try (BufferedWriter writer =
-                     new BufferedWriter(new FileWriter(FILE_NAME, true))) {
+                     new BufferedWriter(new FileWriter(FILE_NAME))) {
 
-            writer.write(contact.toFileFormat());
-            writer.newLine();
+            for (Contact contact : contacts) {
+                writer.write(contact.toFileFormat());
+                writer.newLine();
+            }
 
         } catch (IOException e) {
-            System.out.println("Error saving contact: " + e.getMessage());
+            System.out.println("Error saving file: " + e.getMessage());
         }
     }
 
     private void loadFromFile() {
 
         File file = new File(FILE_NAME);
-
-        if (!file.exists()) {
-            return; // No file yet, skip loading
-        }
+        if (!file.exists()) return;
 
         try (BufferedReader reader =
                      new BufferedReader(new FileReader(FILE_NAME))) {
@@ -50,13 +89,10 @@ public class AddressBook {
                 String[] data = line.split(",");
 
                 if (data.length == 8) {
-
-                    Contact contact = new Contact(
+                    contacts.add(new Contact(
                             data[0], data[1], data[2], data[3],
                             data[4], data[5], data[6], data[7]
-                    );
-
-                    contacts.add(contact);
+                    ));
                 }
             }
 
