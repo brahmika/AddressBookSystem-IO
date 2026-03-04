@@ -11,61 +11,78 @@ public class AddressBookMain {
         Scanner scanner = new Scanner(System.in);
         AddressBook addressBook = new AddressBook();
 
-        addressBook.displayContacts();
+        boolean running = true;
 
-        System.out.println("\n1. Add Contact");
-        System.out.println("2. Edit Contact");
-        int choice = Integer.parseInt(scanner.nextLine());
+        while (running) {
 
-        if (choice == 1) {
+            System.out.println("\nSelect an Option:");
+            System.out.println("1. Add Contact");
+            System.out.println("2. Edit Contact");
+            System.out.println("3. Delete Contact");
+            System.out.println("4. Display Contacts");
+            System.out.println("5. Exit");
 
-            System.out.println("Enter First Name:");
-            String firstName = scanner.nextLine();
+            int choice = Integer.parseInt(scanner.nextLine());
 
-            System.out.println("Enter Last Name:");
-            String lastName = scanner.nextLine();
+            switch (choice) {
 
-            System.out.println("Enter Address:");
-            String address = scanner.nextLine();
+                case 1:
+                    System.out.println("Enter First Name:");
+                    String firstName = scanner.nextLine();
 
-            System.out.println("Enter City:");
-            String city = scanner.nextLine();
+                    System.out.println("Enter Last Name:");
+                    String lastName = scanner.nextLine();
 
-            System.out.println("Enter State:");
-            String state = scanner.nextLine();
+                    System.out.println("Enter Address:");
+                    String address = scanner.nextLine();
 
-            System.out.println("Enter Zip:");
-            String zip = scanner.nextLine();
+                    System.out.println("Enter City:");
+                    String city = scanner.nextLine();
 
-            System.out.println("Enter Phone Number:");
-            String phone = scanner.nextLine();
+                    System.out.println("Enter State:");
+                    String state = scanner.nextLine();
 
-            System.out.println("Enter Email:");
-            String email = scanner.nextLine();
+                    System.out.println("Enter Zip:");
+                    String zip = scanner.nextLine();
 
-            Contact contact = new Contact(
-                    firstName, lastName, address,
-                    city, state, zip, phone, email
-            );
+                    System.out.println("Enter Phone Number:");
+                    String phone = scanner.nextLine();
 
-            addressBook.addContact(contact);
+                    System.out.println("Enter Email:");
+                    String email = scanner.nextLine();
 
-        } else if (choice == 2) {
+                    Contact contact = new Contact(
+                            firstName, lastName, address,
+                            city, state, zip, phone, email
+                    );
 
-            System.out.println("Enter First Name to Edit:");
-            String name = scanner.nextLine();
-            addressBook.editContact(name, scanner);
+                    addressBook.addContact(contact);
+                    break;
+
+                case 2:
+                    System.out.println("Enter First Name to Edit:");
+                    addressBook.editContact(scanner.nextLine(), scanner);
+                    break;
+
+                case 3:
+                    System.out.println("Enter First Name to Delete:");
+                    addressBook.deleteContact(scanner.nextLine());
+                    break;
+
+                case 4:
+                    addressBook.displayContacts();
+                    break;
+
+                case 5:
+                    running = false;
+                    System.out.println("Exiting Address Book...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
-        else if (choice == 3) {
 
-            System.out.println("Enter First Name to Delete:");
-            String name = scanner.nextLine();
-            addressBook.deleteContact(name);
-        }
-        System.out.println("\n1. Add Contact");
-        System.out.println("2. Edit Contact");
-        System.out.println("3. Delete Contact");
-        addressBook.displayContacts();
         scanner.close();
     }
 }
