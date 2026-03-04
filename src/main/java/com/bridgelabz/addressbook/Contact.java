@@ -25,6 +25,17 @@ public class Contact {
         this.email = email;
     }
 
+    public String toFileFormat() {
+        return firstName + "," +
+                lastName + "," +
+                address + "," +
+                city + "," +
+                state + "," +
+                zip + "," +
+                phoneNumber + "," +
+                email;
+    }
+
     @Override
     public String toString() {
         return "\nContact Details:\n" +

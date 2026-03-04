@@ -11,7 +11,9 @@ public class AddressBookMain {
         Scanner scanner = new Scanner(System.in);
         AddressBook addressBook = new AddressBook();
 
-        System.out.println("Enter First Name:");
+        addressBook.displayContacts();
+
+        System.out.println("\nEnter First Name:");
         String firstName = scanner.nextLine();
 
         System.out.println("Enter Last Name:");
