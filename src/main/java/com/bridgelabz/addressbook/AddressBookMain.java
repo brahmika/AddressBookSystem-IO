@@ -1,5 +1,7 @@
 package com.bridgelabz.addressbook;
 
+import com.bridgelabz.addressbook.AddressBookSystem;
+
 import java.util.Scanner;
 
 public class AddressBookMain {
@@ -14,8 +16,10 @@ public class AddressBookMain {
             System.out.println("\n===== Address Book System =====");
             System.out.println("1. Create AddressBook");
             System.out.println("2. Add Contact");
-            System.out.println("3. Sort Contacts Alphabetically");
-            System.out.println("4. Exit");
+            System.out.println("3. Sort by City");
+            System.out.println("4. Sort by State");
+            System.out.println("5. Sort by Zip");
+            System.out.println("6. Exit");
 
             System.out.print("Enter choice: ");
             int choice = Integer.parseInt(scanner.nextLine());
@@ -44,17 +48,28 @@ public class AddressBookMain {
                     System.out.print("State: ");
                     String state = scanner.nextLine();
 
+                    System.out.print("Zip: ");
+                    String zip = scanner.nextLine();
+
                     Contact contact =
-                            new Contact(firstName, lastName, city, state);
+                            new Contact(firstName, lastName, city, state, zip);
 
                     system.addContactToBook(addBook, contact);
                     break;
 
                 case 3:
-                    system.sortByName();
+                    system.sortByCity();
                     break;
 
                 case 4:
+                    system.sortByState();
+                    break;
+
+                case 5:
+                    system.sortByZip();
+                    break;
+
+                case 6:
                     System.out.println("Exiting...");
                     scanner.close();
                     return;

@@ -18,10 +18,6 @@ public class AddressBookSystem {
         System.out.println("AddressBook created successfully!");
     }
 
-    public AddressBook getAddressBook(String name) {
-        return addressBooks.get(name);
-    }
-
     public void addContactToBook(String bookName, Contact contact) {
 
         AddressBook book = addressBooks.get(bookName);
@@ -34,24 +30,58 @@ public class AddressBookSystem {
         book.addContact(contact);
     }
 
-    // 🔥 UC11 – Sort By Name
-    public void sortByName() {
+    //  Common stream to get all contacts
+    private List<Contact> getAllContacts() {
+        return addressBooks.values()
+                .stream()
+                .flatMap(book -> book.getContacts().stream())
+                .collect(Collectors.toList());
+    }
 
-        List<Contact> sortedContacts =
-                addressBooks.values()
-                        .stream()
-                        .flatMap(book -> book.getContacts().stream())
-                        .sorted(
-                                Comparator.comparing(Contact::getFirstName, String.CASE_INSENSITIVE_ORDER)
-                                        .thenComparing(Contact::getLastName, String.CASE_INSENSITIVE_ORDER)
-                        )
+    //  Sort By City
+    public void sortByCity() {
+
+        List<Contact> sorted =
+                getAllContacts().stream()
+                        .sorted(Comparator.comparing(
+                                Contact::getCity,
+                                String.CASE_INSENSITIVE_ORDER))
                         .collect(Collectors.toList());
 
-        if (sortedContacts.isEmpty()) {
+        printResult(sorted);
+    }
+
+    //  Sort By State
+    public void sortByState() {
+
+        List<Contact> sorted =
+                getAllContacts().stream()
+                        .sorted(Comparator.comparing(
+                                Contact::getState,
+                                String.CASE_INSENSITIVE_ORDER))
+                        .collect(Collectors.toList());
+
+        printResult(sorted);
+    }
+
+    //  Sort By Zip
+    public void sortByZip() {
+
+        List<Contact> sorted =
+                getAllContacts().stream()
+                        .sorted(Comparator.comparing(Contact::getZip))
+                        .collect(Collectors.toList());
+
+        printResult(sorted);
+    }
+
+    private void printResult(List<Contact> contacts) {
+
+        if (contacts.isEmpty()) {
             System.out.println("No contacts available.");
             return;
         }
 
-        sortedContacts.forEach(System.out::println);
+        contacts.forEach(System.out::println);
     }
 }

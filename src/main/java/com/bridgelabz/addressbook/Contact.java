@@ -8,29 +8,23 @@ public class Contact {
     private String lastName;
     private String city;
     private String state;
+    private String zip;
 
-    public Contact(String firstName, String lastName, String city, String state) {
+    public Contact(String firstName, String lastName,
+                   String city, String state, String zip) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
         this.state = state;
+        this.zip = zip;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getCity() { return city; }
+    public String getState() { return state; }
+    public String getZip() { return zip; }
 
     @Override
     public boolean equals(Object obj) {
@@ -53,6 +47,7 @@ public class Contact {
     public String toString() {
         return firstName + " " + lastName +
                 " | City: " + city +
-                " | State: " + state;
+                " | State: " + state +
+                " | Zip: " + zip;
     }
 }
